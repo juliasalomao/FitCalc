@@ -1,7 +1,7 @@
 <?php
 // CONFIGURAÇÃO DO BANCO DE DADOS
 
-define("DB_NAME", "fitcalc");
+define("DB_NAME", "Fitcalc");
 define("DB_HOST", "localhost");
 define("DB_USER", "root");
 define("DB_PASSWORD", '');
