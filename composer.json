@@ -1,0 +1,26 @@
+{
+    "name": "pc/teste",
+    "description": "Projeto calculadora IMC",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "Pc\\Teste\\": "fitCalc Julia/",
+            "Controller\\" : "Controller/",
+            "Model\\" : "Model"
+        },
+        "files": [
+            "Config/configuration.php"
+        ]
+    },
+    "authors": [
+        {
+            "name": "juliasalomao",
+            "email": "costasalomaojulia@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php" : ">= 8.0",
+        "ext-mbstring": "8"
+    }
+}
