@@ -37,7 +37,7 @@ class User {
 
             // EXECUTAR TUDO
 
-            $stmt->execute();
+             return $stmt->execute();
 
         } catch (PDOException $error) {
             // EXIBIR MENSAGEM DE ERRO COMPLETA E PARAR A EXECUÇÃO

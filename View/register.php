@@ -4,19 +4,38 @@
 require_once '../vendor/autoload.php';
 
 //IMPORTANDO A CLASSE USER
-use Model\User;
+use Controller\UserController;
 
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['user_fullname'], $_POST['email'], $_POST['password'])) 
-    $user_fullname = $_POST['user_fullname'];
-    $email = $_POST['email'];
-    $password = $_POST['password'];
+$userController = new UserController();
 
-    $user = new User();
-    $user->registerUser($user_fullname, $email, $password);
+$registerUserMessage = '';
+
+
+if($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['user_fullname'], $_POST['email'], $_POST['password'])) {
+        $user_fullname = $_POST['user_fullname'];
+        $email = $_POST['email'];
+        $password = $_POST['password'];
+
+        // USO DO CONTROLLER PARA VERIFICAÇÃO DE E-MAIL E CADASTRO 
+
+        //JÁ EXISTE RM E-MAIL JÁ CADASTRADO?
+        if($userController->checkUsertByEmail($email)) {
+            $registerUserMessage = "Já exite um usuário cadsstrado com esse endereço de e-mail.";
+        } else {
+            if($userController->registerUser($user_fullname, $email, $password)) {
+               header('Location: ../index.php');                
+                exit ();         
+            } else {
+                $registerUserMessage = "Erro ao registrar informações. Tente novamente.";
+            }
+        }
+    }
 }
+
 ?>
+
 
 
 <!DOCTYPE html>
@@ -108,7 +127,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <p class="text-center">Já tem uma conta? <a href="../index.php">Faça login aqui</a></p>
             </div>
         </form>
-        <p></p>
+        <p> <? echo $registerUserMessage; ?> </p>
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"

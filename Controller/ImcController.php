@@ -3,11 +3,11 @@
 namespace Controller;
 
 use Model\Imcs;
+
 use Exception;
 
 class ImcController
 {
-
     private $imcsModel;
 
     public function __construct()
@@ -15,42 +15,53 @@ class ImcController
         $this->imcsModel = new Imcs();
     }
 
-    //CALCULO E CLASSIFICAÇÃO 
+    // CALCULO E CLASSIFICAÇÃO 
     public function calculateImc($weight, $height)
     {
         try {
-            /*  Exemplo de cálculo de IMC
-            * $result = {
-            * "Imc": 22.82,
-            * "BMIrange" : "Sobrepeso"
-            * ];
-            */
-
+            /**
+             * $result = [
+             *  "imc": 22.82,
+             *  "BMIrange": "Sobrepeso"
+             * ]; 
+             */
             $result = [];
-            if(isset($weight) or isset($height)){
-                if($weight > 0 and $height > 0){
+            if (isset($weight) and isset($height)) {
+                if ($weight > 0 and $height > 0) {
                     $imc = round($weight / ($height * $height), 2);
                     $result['imc'] = $imc;
 
-                    $result['BMIrange'] = match (true){
-                        $imc < 18.5 => 'Abaixo do peso',
-                        $imc >= 18.5 && $imc < 24.9 => 'Peso normal',
-                        $imc >= 25 and $imc < 29.9 => 'Sobrepeso',
-                        $imc >= 30 and $imc < 34.9 => 'Obesidade grau I',
-                        $imc >= 35 and $imc < 39.9 => 'Obesidade grau II',
-                        default => 'Obesidade grau III ou mórbida'
+                    $result["BMIrange"] = match (true) {
+                        $imc < 18.5 => "Baixo peso",
+                        $imc >= 18.5 and $imc < 25 => "Peso normal",
+                        $imc >= 25 and $imc < 30 => "Sobrepeso",
+                        $imc >= 30 and $imc < 35 => "Obesidade grau I",
+                        $imc >= 35 and $imc < 40 => "Obesidade grau II",
+                        default => "Obesidade grau III"
                     };
                 } else {
-                    $result['BMIrange'] = "O peso e altura deve conter alturas menores.";
+                    $result["BMIrange"] = "O peso e a altura devem conter valores positivos.";
                 }
-                
             } else {
-                $result['BMIrange'] = "Por favor, informe peso e altura para obter o seu IMC.";
+                $result["BMIrange"] = "Por favor, informe peso e altura para obter o seu IMC.";
             }
+
+            return $result;
+
         } catch (Exception $error) {
-            echo "Erro ao calcular o IMC:" . $error->getMessage();
+            echo "Erro ao calcular IMC: " . $error->getMessage();
             return false;
         }
     }
+
+    // SALVAR IMC NA TABELA `imcs`
+
+    // PEGAR PESO, ALTURA E RESULTADO DO FRONT E ENVIAR PARA O BANCO DE DADOS
+    public function saveIMC($weight, $height, $IMCresult)
+    {
+        return $this->imcsModel->createImc($weight, $height, $IMCresult);
+    }
 }
+
 ?>
+
